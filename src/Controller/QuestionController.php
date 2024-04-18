@@ -25,8 +25,8 @@ class QuestionController extends AbstractController
         
         $count = count($questions);
 
-        for ($i = 1; $i <= 10; $i++) {
-            $number = random_int(1, $count);
+        $numbers = $this->generateRandomNumbers(1, $count, 10);
+        foreach ($numbers as $number) {
             $serie[] = $questions[$number-1];
         }
          
@@ -41,4 +41,20 @@ class QuestionController extends AbstractController
     {
 
     }
+    
+    function generateRandomNumbers($min, $max, $count) {
+    if ($max - $min + 1 < $count) {
+        throw new Exception("Impossible de générer autant de nombres uniques dans la plage spécifiée.");
+    }
+
+    $numbers = [];
+    while (count($numbers) < $count) {
+        $randomNumber = rand($min, $max);
+        if (!in_array($randomNumber, $numbers)) {
+            $numbers[] = $randomNumber;
+        }
+    }
+
+    return $numbers;
+}
 }
