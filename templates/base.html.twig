@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <!-- Include TinyMCE styles -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@5.9.1/themes/content/default/content.css">
+    {% endblock %}
+</head>
+<body>
+    {% block body %}{% endblock %}
+    {% block javascripts %}
+        <!-- Include TinyMCE JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/tinymce@5.9.1/tinymce.min.js"></script>
+        <script>
+            tinymce.init({
+                selector: '.tinymce',
+                plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+                toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                content_css: 'https://cdn.jsdelivr.net/npm/tinymce@5.9.1/themes/content/default/content.css'
+            });
+        </script>
+    {% endblock %}
+</body>
+</html>

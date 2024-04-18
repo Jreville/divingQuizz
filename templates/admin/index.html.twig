@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Questions{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        a.button {
+            display: block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            width: fit-content;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #f8f9fa;
+        }
+
+        td.actions {
+            text-align: center;
+        }
+
+        td.actions a {
+            text-decoration: none;
+            color: #007bff;
+            margin-right: 10px;
+        }
+
+        td.actions button {
+            border: none;
+            background: none;
+            color: #dc3545;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}    
+{% block body %}
+    <h1>Questions</h1>
+    <a href="{{ path('admin_question_new') }}">Ajouter une nouvelle question</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Question</th>
+                <th>Réponse</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+                <tr>
+                    <td>{{ question.id }}</td>
+                    <td>{{ question.label }}</td>
+                    <td>{{ question.answer|raw }}</td>
+                    <td>
+                        <a href="{{ path('admin_question_edit', {'id': question.id}) }}">Modifier</a>
+                        <form action="{{ path('admin_question_delete', {'id': question.id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+                            <button type="submit" onclick="return confirm('Confirmer la suppression');">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('admin_question_new') }}">Ajouter une nouvelle question</a>
+{% endblock %}

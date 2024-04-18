@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choix{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            height: 100vh; /* Hauteur de la fenêtre visible */
+            display: flex;
+            justify-content: center; /* Alignement horizontal */
+            align-items: center; /* Alignement vertical */
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            display: block;
+            width: 300px;
+            padding: 20px;
+            font-size: 20px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            text-decoration: none; /* Supprime l'underline */
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+   <div class="button-container">
+        <a href="{{ path('series_of_questions') }}" class="button">Lancer une série de 10 questions</a>
+    </div>
+{% endblock %}

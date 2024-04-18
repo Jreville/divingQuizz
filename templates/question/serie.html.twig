@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choix{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Utilisation de la police Roboto */
+            background-color: #f0f0f0;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            display: block;
+            width: 300px;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        /* Nouveau style pour le contenu des questions */
+        .question-content {
+            margin-top: 20px;
+            padding: 10px;
+        }
+        /* Style pour les listes à puce */
+        .question-content ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+  /* Supprimer les puces des listes ul */
+        .question-content ul {
+            margin: 0;
+            padding-left: 20px;
+            text-align: left;
+            li {
+                list-style-type: none; /* Ajout de cette ligne pour supprimer les puces */
+            }
+        }
+        .question-content ul li {
+            margin-bottom: 10px;
+            /* Autres styles... */
+        }
+
+        /* Style du bouton "Afficher/Masquer" */
+        .toggleButton {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background-color: red;
+            color: #fff;
+            border: 2px solid red; /* Bordure */
+            border-radius: 50%; /* Bordure arrondie pour créer un bouton rond */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+        .toggleButton:hover {
+            background-color: lightcoral;
+            border: 2px solid lightcoral;
+        }
+        .toggleButton::after {
+            content: "?"; /* Contenu du bouton "Afficher/Masquer" */
+        }
+        .panel {
+            margin-bottom: 20px;
+        }
+
+     
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="button-container">
+        {% for key, question in serie %}
+            {% set key = key + 1  %}
+            <div class="panel" id="panel_{{ key }}"{% if key != 1 %} style="display:none" {% endif %}>
+                <h1>Question {{ key }}/10</h1>
+                <h2>{{ question.label }}</h2>
+                <button class="toggleButton" data-role="content_{{ key }}"></button>
+                <div class="question-content" id="content_{{ key }}" style="display: none;">
+                    {{ question.answer | raw }}
+                    <a target="_blank" href="{{ path('admin_question_edit',  {'id':  question.id }) }}">La réponse est mauvaise/incomplète</a>
+                </div>
+                
+            </div>
+        {% endfor %}
+        <a href="#" id="btn_next" class="button next" style="margin: auto;">Question suivante</a>
+        <a href="{{ path('home') }}" id="btn_end" class="button next" style="margin: auto; display:none">Fin</a>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".toggleButton").click(function() {
+                var content = $(this).data("role");
+                var element = $('#' + content);
+                element.toggle();
+            });
+            $(".next").click(function() {
+                var toggle = false;
+                for (var i = 1; i <= 10; i++) {
+                    var element = $('#panel_' + i);
+                    if (element.is(":visible")) {
+                        toggle = true;
+                        element.hide();
+                    } else if (element.is(":hidden") && toggle) {
+                        element.show();
+                        toggle = false;
+                        if (i == 10) {
+                            $('#btn_next').hide();
+                            $('#btn_end').show();
+                        }
+                    } 
+                }
+            });
+        });
+    </script>
+{% endblock %}
