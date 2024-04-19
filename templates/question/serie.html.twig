@@ -141,7 +141,7 @@
                 <h1>Question {{ key }}/10</h1>
                 {% if question.label starts with 'http://' or question.label starts with 'https://' %}
                        <img style="    text-align: center;
-    max-width: 800px;
+    max-width: 500px;
     display: block;
     margin: auto;" src="{{ question.label }}" />
                 {% else %}
@@ -167,6 +167,10 @@
                 var content = $(this).data("role");
                 var element = $('#' + content);
                 element.toggle();
+                
+                 if ($(this).siblings('img').length > 0) {
+                     $(this).siblings('img').toggle();
+                 }
             });
             $(".next").click(function() {
                 var toggle = false;
