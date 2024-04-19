@@ -139,7 +139,7 @@
             {% set key = key + 1  %}
             <div class="panel" id="panel_{{ key }}"{% if key != 1 %} style="display:none" {% endif %}>
                 <h1>Question {{ key }}/10</h1>
-                {% if question.label starts with 'http://' or your_variable starts with 'https://' %}
+                {% if question.label starts with 'http://' or question.label starts with 'https://' %}
                        <img style="text-align: center" src="{{ question.label }}" />
                 {% else %}
                     <h2>{{ question.label }}</h2>
