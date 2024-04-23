@@ -19,7 +19,28 @@ class QuestionController extends AbstractController
     public function index(QuestionRepository $questionRepository): Response
     {
         // Récupérer toutes les questions depuis le repository
-        $questions = $questionRepository->findAll();
+        $questions = $questionRepository->findBy(['type' => 1]);
+
+        $serie = [];
+        
+        $count = count($questions);
+
+        $numbers = $this->generateRandomNumbers(1, $count, 10);
+        foreach ($numbers as $number) {
+            $serie[] = $questions[$number-1];
+        }
+         
+        // Passer les questions au template pour l'affichage
+        return $this->render('question/serie.html.twig', [
+            'serie' => $serie,
+        ]);
+    }
+    
+    #[Route('/questions/mf2', name: 'series_of_questions_mf2')]
+    public function mf2(QuestionRepository $questionRepository): Response
+    {
+        // Récupérer toutes les questions depuis le repository
+        $questions = $questionRepository->findBy(['type' => 2]);
 
         $serie = [];
         

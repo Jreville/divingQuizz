@@ -51,9 +51,28 @@
             color: #dc3545;
             cursor: pointer;
         }
+        .button {
+            font-size: 1.75em;
+            width: 20em;
+            display: block;
+            padding: 20px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            text-decoration: none; /* Supprime l'underline */
+            text-align: center;
+        }
     </style>
 {% endblock %}    
 {% block body %}
+    <a href="{{ path('series_of_questions') }}" class="button">Série de 10 questions N4</a>
     <h1>Questions</h1>
     <a href="{{ path('admin_question_new') }}">Ajouter une nouvelle question</a>
     <table>

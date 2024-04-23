@@ -43,11 +43,30 @@
         .button:hover {
             background-color: #0056b3;
         }
+        
+        .container {
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+            align-items: center; /* Centrer verticalement */
+            height: 100px; /* Hauteur de votre choix */
+        }
+
+        .barre {
+            width: 80%; /* Largeur de la barre */
+            height: 2px; /* Épaisseur de la barre */
+            background-color: red; /* Couleur de la barre */
+        }
     </style>
 {% endblock %}
 
 {% block body %}
    <div class="button-container">
-        <a href="{{ path('series_of_questions') }}" class="button">Lancer une série de 10 questions</a>
+        <h1> Je révise mon N4 </h1>
+        <a href="{{ path('series_of_questions') }}" class="button">Série de 10 questions N4</a>
+        <div class="container">
+            <div class="barre"></div>
+        </div>
+        <h1> Je révise mon MF2 </h1>
+        <a href="{{ path('series_of_questions_mf2') }}" class="button">Série de 10 questions MF2</a>
     </div>
 {% endblock %}

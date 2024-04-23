@@ -18,15 +18,7 @@
             body {
                 font-size: 1.75em;
             }
-            #btn_next.button, #btn_end.button {
-                font-size: 1.25em;
-                width: 20em;
-            }
-            
-            .panel .toggleButton {
-               padding: 30px 40px;
-               font-size: 1.25em;
-            }
+           
         }
         h1 {
             color: #333;
@@ -72,6 +64,13 @@
         .question-content ul li {
             margin-bottom: 10px;
             /* Autres styles... */
+        }
+        
+        .previous.laptop {
+            display: block;
+        }
+        .previous.mobile {
+            display: none;
         }
 
 .question-content ul ul {
@@ -130,6 +129,148 @@
             color: black;
         }
 
+@media(max-width: 1000px) {
+    .question-content .link {
+        font-size: 35px;
+    }
+    
+    .panel {
+        margin-top: 222px;
+    }
+    
+    .answer-container, .question-container {
+        height: 20em;
+        overflow: hidden;
+    }
+    .panel h1 {
+        position: fixed;
+        top: 0;
+        background-color: lightblue;
+        margin: 0 auto;
+        left: 18%;
+        padding: 50px;
+        font-size: 80px;
+    }
+    .panel .bouton-precedent {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 45px;
+        font-size: 90px;
+        text-decoration: none;
+        background-color: lightgray;
+    }
+    
+    #btn_next,#btn_end.button {
+        position: fixed;
+        bottom: 0;
+        font-size: 1.75em;
+        width: 100%;
+        left: 0;
+        padding: 70px 0px;
+    }
+    .question-box, .answer-box {
+        font-size: 4em;
+    }
+    
+    body {
+        display: block;
+    }
+    
+    .toggleButton {
+            position: fixed;
+    padding: 0.5em 0.75em;
+    font-size: 10em;
+    left: 20%;
+    top: 50%;
+    }
+    
+    .previous.laptop {
+            display: none;
+        }
+        .previous.mobile {
+            display: block;
+        }
+}
+ 
+    
+
+@media(max-width: 1000px) and (orientation: landscape) {
+    .button-container {
+        text-align: center;
+        margin-top: 0;
+    }
+    
+    
+    .question-content .link {
+        font-size: 20px;
+    }
+    
+    .panel {
+        margin-top: 80px;
+    }
+    
+    .answer-container, .question-container {
+        height: 12em;
+        overflow: hidden;
+    }
+    .panel h1 {
+        position: fixed;
+        top: 0;
+        background-color: lightblue;
+        margin: 0 auto;
+        left: 40%;
+        padding: 20px;
+        font-size: 20px;
+    }
+    .panel .bouton-precedent {
+        position: fixed;
+    top: 0;
+    left: 0;
+    padding: 10px 40px;
+    font-size: 40px;
+    text-decoration: none;
+    background-color: lightgray;
+    }
+    
+    #btn_next,#btn_end.button {
+        position: fixed;
+        bottom: 0;
+        font-size: 1em;
+        width: 100%;
+        left: 0;
+        padding: 20px 0px;
+    }
+    .question-box, .answer-box {
+        font-size: 4em;
+    }
+    
+    body {
+        display: block;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .toggleButton {
+       position: fixed;
+    top: -10px;
+    left: 80%;
+    padding: 10px 40px;
+    font-size: 40px;
+    text-decoration: none;
+    background-color: red;
+    border-radius: 0;
+
+    }
+    .previous.laptop {
+            display: none;
+        }
+        .previous.mobile {
+            display: block;
+        }
+}    
+    
     </style>
 {% endblock %}
 
@@ -138,22 +279,30 @@
         {% for key, question in serie %}
             {% set key = key + 1  %}
             <div class="panel" id="panel_{{ key }}"{% if key != 1 %} style="display:none" {% endif %}>
+                {% if key != 1 %}<a href="#" class="mobile previous bouton-precedent">&lt;</a>{% endif %}
+                {% if key != 1 %}<a href="#" class="laptop previous bouton-precedent">Retour</a>{% endif %}
                 <h1>Question {{ key }}/10</h1>
+                <div class="question-container" id="qc_{{ key }}">
+                    <div class="question-box">
                 {% if question.label starts with 'http://' or question.label starts with 'https://' %}
                        <img style="    text-align: center;
     max-width: 500px;
     display: block;
     margin: auto;" src="{{ question.label }}" />
                 {% else %}
-                    <h2>{{ question.label }}</h2>
+                        {{ question.label }}
                 {% endif %}
-                
-                <button class="toggleButton" data-role="content_{{ key }}"></button>
-                <div class="question-content" id="content_{{ key }}" style="display: none;">
-                    {{ question.answer | raw }}
-                    <a class="link" target="_blank" href="{{ path('admin_question_edit',  {'id':  question.id }) }}">La réponse est mauvaise/incomplète</a>
+                    </div>
                 </div>
-
+                <button class="toggleButton" id="toggleButton_{{ key }}" data-role="content_{{ key }}"></button>
+                <div class="answer-container" id="content_{{ key }}" style="display: none;">
+                    <div class="answer-box">
+                        <div class="question-content">
+                            {{ question.answer | raw }}
+                            <a class="link" target="_blank" href="{{ path('admin_question_edit',  {'id':  question.id }) }}">La réponse est mauvaise/incomplète</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         {% endfor %}
         <a href="#" id="btn_next" class="button next" style="margin: auto;">Question suivante</a>
@@ -163,10 +312,52 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            
+            function isLandscape() {
+                console.log($(window).width());
+                console.log($(window).height());
+                return $(window).width() > $(window).height();
+            }
+             
+  // Fonction pour ajuster la taille de la police en fonction de la hauteur de la div
+  function ajusterTaillePolice(container, box) {
+      console.log(container);
+    var panelId = container.attr('id');
+
+    var texteDiv = $('#'+panelId+' '+box);
+    var containerHeight = container.height();
+    
+    var texteHeight = texteDiv.outerHeight();
+    var fontSize = parseInt(texteDiv.css('font-size'));
+    
+    // Si la hauteur du texte dépasse la hauteur de la div, réduire la taille de la police
+    console.log(texteHeight + ' ' + containerHeight );
+    if (texteHeight > containerHeight) {
+      texteDiv.css('font-size', (fontSize - 1) + 'px'); // Réduire la taille de la police
+      ajusterTaillePolice(container, box); // Appeler récursivement jusqu'à ce que la taille soit adaptée
+    }
+  }
+  
+  $('.question-container').each( function() {
+      ajusterTaillePolice($(this), '.question-box');
+  });
+  
+  $('.answer-container').each( function() {
+     ajusterTaillePolice($(this), '.answer-box');
+  });
+  console.log('------------------------------------------')
+  
             $(".toggleButton").click(function() {
                 var content = $(this).data("role");
                 var element = $('#' + content);
                 element.toggle();
+                $(this).hide();
+                if (isLandscape()) {
+                      console.log('test2 ', isLandscape);
+                      element.siblings('.question-container').hide();   
+                }
+                
+                ajusterTaillePolice(element, '.answer-box');
                 
                  if ($(this).siblings('img').length > 0) {
                      $(this).siblings('img').toggle();
@@ -187,7 +378,33 @@
                             $('#btn_end').show();
                         }
                     }
+                    console.log(element);
+                    ajusterTaillePolice(element, '.question-box');
                 }
+                
+                
+            });
+            
+            $(".previous").click(function() {
+                var toggle = false;
+                for (var i = 10; i >= 1; i--) {
+                    var element = $('#panel_' + i);
+                    if (element.is(":visible")) {
+                        toggle = true;
+                        element.hide();
+                    } else if (element.is(":hidden") && toggle) {
+                        element.show();
+                        toggle = false;
+                        if (i == 10) {
+                            $('#btn_next').hide();
+                            $('#btn_end').show();
+                        }
+                    }
+                    console.log(element);
+                    ajusterTaillePolice(element, '.question-box');
+                }
+                
+                
             });
         });
     </script>
