@@ -7,6 +7,8 @@ use App\Form\JsonToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use App\Entity\Type;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,6 +24,11 @@ class QuestionType extends AbstractType
                 'label' => "Réponse",
                 'attr' => ['class' => 'tinymce'],
                 'data' => $options['data']->getAnswer(), // Ensure JSON data is set to textarea
+            ])
+            ->add('type', EntityType::class, [
+                'class' => Type::class,
+                'choice_label' => 'label',
+                'placeholder' => 'Choose a type',
             ]);
     }
 
